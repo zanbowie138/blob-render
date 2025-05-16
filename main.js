@@ -94,7 +94,7 @@ const uniforms = {
   u_skybox: { value: null },
   u_sphereSpeed: { value: 0.5 },
   u_sphereRadius: { value: 0.5 },
-  u_sphereDistance: { value: 2.0 },
+  u_sphereDistance: { value: 1.7 },
   u_smoothingFactor: { value: 0.5 }
 };
 
@@ -138,7 +138,7 @@ const params = {
   envMapIntensity: 0.1,
   sphereSpeed: 0.5,
   sphereRadius: 0.5,
-  sphereDistance: 2.0,
+  sphereDistance: 1.7,
   smoothingFactor: 0.5
 };
 

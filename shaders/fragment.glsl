@@ -91,13 +91,13 @@ bool rayIntersectsSphere(vec3 ro, vec3 rd, float radius, out float t0, out float
 }
 
 float rayMarch(vec3 ro, vec3 rd) {
-    float maxDisp = abs(u_noiseAmpX) * abs(u_noiseAmpY);
+    float maxDisp = u_sphereRadius + u_sphereDistance;
     float radius = 1.0 + maxDisp;
     float t0, t1;
     
-    // if (!rayIntersectsSphere(ro, rd, radius, t0, t1)) {
-    //     return u_maxDis;
-    // }
+    if (!rayIntersectsSphere(ro, rd, radius, t0, t1)) {
+        return u_maxDis;
+    }
     
     float d = max(t0, 0.0);
     for(int i = 0; i < u_maxSteps; ++i) {
@@ -126,9 +126,34 @@ vec3 envMap(vec3 R) {
 vec3 sceneCol(vec3 p) {
     vec3 np = normalize(p);
     float t = (np.y + 1.0) * 0.5;
-    vec3 color1 = vec3(1.0, 0.3, 0.6);
-    vec3 color2 = vec3(1.0, 0.7, 0.2);
-    return mix(color1, color2, t);
+    
+    // Base sphere color
+    vec3 baseColor = vec3(0.83, 0.0, 1.0);  // Purple
+    
+    // Additional sphere colors
+    float time = u_time * u_sphereSpeed;
+    vec3 sphere1Color = vec3(1.0, 0.2, 0.3);  // Red
+    vec3 sphere2Color = vec3(0.2, 0.8, 1.0);  // Cyan
+    vec3 sphere3Color = vec3(0.2, 1.0, 0.4);  // Green
+    
+    // Calculate distances to each sphere
+    float t1 = u_time * u_sphereSpeed;
+    float d1 = length(p - vec3(sin(t1) * u_sphereDistance, cos(t1) * u_sphereDistance, 0.0)) - u_sphereRadius;
+    float d2 = length(p - vec3(cos(t1 * 0.7) * u_sphereDistance, 0.0, sin(t1 * 0.7) * u_sphereDistance)) - u_sphereRadius;
+    float d3 = length(p - vec3(0.0, sin(t1 * 0.3) * u_sphereDistance, cos(t1 * 0.3) * u_sphereDistance)) - u_sphereRadius;
+    
+    // Smooth blending factors
+    float blend1 = smoothstep(u_sphereRadius * 2.0, 0.0, d1);
+    float blend2 = smoothstep(u_sphereRadius * 2.0, 0.0, d2);
+    float blend3 = smoothstep(u_sphereRadius * 2.0, 0.0, d3);
+    
+    // Blend colors based on proximity to each sphere
+    vec3 finalColor = baseColor;
+    finalColor = mix(finalColor, sphere1Color, blend1);
+    finalColor = mix(finalColor, sphere2Color, blend2);
+    finalColor = mix(finalColor, sphere3Color, blend3);
+    
+    return finalColor;
 }
 
 vec3 normal(vec3 p) {
