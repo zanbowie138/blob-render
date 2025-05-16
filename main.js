@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import vertCode from "./shaders/vertex.glsl?raw";
-import fragCode from "./shaders/fragment.glsl?raw";
+import vertCode from "./public/shaders/vertex.glsl?raw";
+import fragCode from "./public/shaders/fragment.glsl?raw";
 import Stats from "stats.js";
 
 // Create a scene
