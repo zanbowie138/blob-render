@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { OrbitControls } from "https://esm.sh/three/examples/jsm/controls/OrbitControls";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import vertCode from "./shaders/vertex.glsl?raw";
 import fragCode from "./shaders/fragment.glsl?raw";
 import Stats from "stats.js";
@@ -89,7 +89,6 @@ scene.add(rayMarchPlane);
 
 // Needed inside update function
 let cameraForwardPos = new THREE.Vector3(0, 0, -1);
-const VECTOR3ZERO = new THREE.Vector3(0, 0, 0);
 
 let time = Date.now();
 
@@ -100,7 +99,11 @@ const animate = () => {
   // Update screen plane position and rotation
   cameraForwardPos = camera.position
     .clone()
-    .add(camera.getWorldDirection(VECTOR3ZERO).multiplyScalar(camera.near));
+    .add(
+      camera
+        .getWorldDirection(new THREE.Vector3(0, 0, 0))
+        .multiplyScalar(camera.near)
+    );
   rayMarchPlane.position.copy(cameraForwardPos);
   rayMarchPlane.rotation.copy(camera.rotation);
 
