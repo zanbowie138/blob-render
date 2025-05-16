@@ -101,7 +101,7 @@ const uniforms = {
 // Remove CubeTextureLoader code, use RGBELoader for HDR
 const rgbeLoader = new RGBELoader();
 rgbeLoader.setDataType(THREE.FloatType);
-rgbeLoader.load('./blob-render/sunrise.hdr', function (texture) {
+rgbeLoader.load('./sunrise.hdr', function (texture) {
   uniforms.u_skybox.value = texture;
   texture.needsUpdate = true;
 });
